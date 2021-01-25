@@ -1,83 +1,104 @@
 <script>
     import { Deck } from "@deck.gl/core";
-    import {
-        createEventDispatcher,
-        onMount,
-        onDestroy,
-        afterUpdate,
-    } from "svelte";
+    import mapbox from "mapbox-gl";
+    import { tick, onMount } from "svelte";
 
-    const dispatch = createEventDispatcher();
-
+    /** @type {object} */
+    let map = null;
+    /** @type {object} */
+    let deck = null;
+    /** @type {HTMLElement} */
+    let deckMap;
+    /** @type {HTMLElement} */
     let deckCanvas;
-    let deck;
-    export let width = "100%";
-    export let height = "100%";
+
+    /** @type {object} */
+    let options = {};
+
     export let layers = [];
-    export let viewState = {};
+    export let viewState;
+    export let TOKEN;
     export let getTooltip = () => {};
-    export let maps;
-    export let controller = true;
-    export let effects;
 
-    $: console.log(maps);
+    onMount(() => {
+        // creating the map
+        mapbox.accessToken = TOKEN;
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.type = "text/css";
+        link.href = "https://unpkg.com/mapbox-gl/dist/mapbox-gl.css";
 
+        const optionsWithDefaults = Object.assign(
+            {
+                container: deckMap,
+                style: viewState.style,
+                center: [viewState.longitude, viewState.latitude],
+                zoom: viewState.zoom,
+                interactive: false,
+                bearing: viewState.bearing,
+                pitch: viewState.pitch,
+            },
+            options
+        );
+
+        document.head.appendChild(link);
+
+        link.onload = async () => {
+            map = new mapbox.Map(optionsWithDefaults);
+            await tick();
+            render();
+        };
+
+        return () => {
+            map.remove();
+            link.parentNode.removeChild(link);
+        };
+    });
+
+    // creating the deck.gl instance
     const render = () => {
         deck = new Deck({
             canvas: deckCanvas,
-            gl: maps.painter.context.gl,
             width: "100%",
             height: "100%",
-            initialViewState: {
-                longitude: -1.415727,
-                latitude: 52.232395,
-                zoom: 6.6,
-                pitch: 40.5,
-                bearing: -27,
-            },
+            initialViewState: viewState,
+            controller: true,
             layers: [layers],
             onViewStateChange: ({ viewState }) => {
-                maps.jumpTo({
+                map.jumpTo({
                     center: [viewState.longitude, viewState.latitude],
                     zoom: viewState.zoom,
                     bearing: viewState.bearing,
                     pitch: viewState.pitch,
                 });
             },
-            controller: true,
+            getTooltip,
         });
-        deck.setProps({
-            layers: [layers],
-        });
+        deck.setProps({ layers: [layers] });
     };
-
-    // afterUpdate(() => {
-    //     render();
-    // });
-
-    onDestroy(() => {
-        deck.finalize();
-    });
 </script>
 
-<div class="deck-container" style="width: {width}; height:{height}">
-    {#if maps}
-        <canvas bind:this={deckCanvas} use:render />
-    {/if}
+<div class="deck-container">
+    <div id="map" bind:this={deckMap} />
+    <canvas id="deck-canvas" bind:this={deckCanvas} />
 </div>
 
-<!--{#if map}
-            <canvas bind:this={deckCanvas} use:render />
-        {/if}-->
 <style>
     .deck-container {
-        position: fixed;
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+    #map {
+        position: absolute;
         top: 0;
         left: 0;
-        right: 0;
-        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background: #e5e9ec;
+        overflow: hidden;
     }
-    .deck-container > * {
+    #deck-canvas {
         position: absolute;
         top: 0;
         left: 0;
