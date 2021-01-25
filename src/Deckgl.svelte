@@ -1,23 +1,26 @@
 <script>
     import { Deck } from "@deck.gl/core";
     import mapbox from "mapbox-gl";
-    import { tick, onMount } from "svelte";
+    import { onMount } from "svelte";
 
-    /** @type {object} */
+    /** @type {Object.<string, number>}*/
     let map = null;
-    /** @type {object} */
+    /** @type {Object.<string, number>}*/
     let deck = null;
     /** @type {HTMLElement} */
     let deckMap;
     /** @type {HTMLElement} */
     let deckCanvas;
-
-    /** @type {object} */
+    /** @type {Object.<string, number>} - mapbox gl extra view States*/
     let options = {};
 
+    /** @type {Array.<string, object>}*/
     export let layers = [];
-    export let viewState;
-    export let TOKEN;
+    /** @type {Object.<string, number>}*/
+    export let viewState = {};
+    /** @type {String}*/
+    export let TOKEN = null;
+    /** @type {Function} */
     export let getTooltip = () => {};
 
     onMount(() => {
@@ -28,6 +31,7 @@
         link.type = "text/css";
         link.href = "https://unpkg.com/mapbox-gl/dist/mapbox-gl.css";
 
+        /** @type {Object.<string, number>}*/
         const optionsWithDefaults = Object.assign(
             {
                 container: deckMap,
@@ -43,9 +47,9 @@
 
         document.head.appendChild(link);
 
-        link.onload = async () => {
+        link.onload = () => {
             map = new mapbox.Map(optionsWithDefaults);
-            await tick();
+
             render();
         };
 
@@ -79,8 +83,8 @@
 </script>
 
 <div class="deck-container">
-    <div id="map" bind:this={deckMap} />
-    <canvas id="deck-canvas" bind:this={deckCanvas} />
+    <div class="map-container" bind:this={deckMap} />
+    <canvas class="deck-canvas" bind:this={deckCanvas} />
 </div>
 
 <style>
@@ -89,7 +93,8 @@
         height: 100%;
         position: relative;
     }
-    #map {
+
+    .map-container {
         position: absolute;
         top: 0;
         left: 0;
@@ -98,11 +103,12 @@
         background: #e5e9ec;
         overflow: hidden;
     }
-    #deck-canvas {
+
+    .deck-canvas {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
     }
-</style>
+</div>

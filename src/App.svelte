@@ -1,5 +1,4 @@
 <script>
-	import { csv as requestCsv } from "d3-request";
 	import { HexagonLayer } from "@deck.gl/aggregation-layers";
 	import SvelteDeckGL from "./Deckgl.svelte";
 
@@ -18,7 +17,7 @@
 
 		const count = object.points.length;
 
-		return `${count} Accidents`;
+		return `${count} No. of bikes`;
 	}
 	let viewState = {
 		longitude: -122.4,
