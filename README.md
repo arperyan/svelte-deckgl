@@ -10,7 +10,7 @@ Install svelte-deck.gl
 ## Usage
 Import the component into your app/components
 
-import SvelteDeckGL from "svelte-deck.gl";
+```import SvelteDeckGL from "svelte-deck.gl";```
 
 
 ### Using Mapbox
