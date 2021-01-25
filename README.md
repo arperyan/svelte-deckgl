@@ -1,5 +1,7 @@
 # Svelte DeckGL
-Head over to the deck.gl official documentation to learn more about this.
+
+# Deck.gl and Mapbox
+Head over to Deck.gl and Mapbox to see the official documentation to learn more.
 
 # Install svelte-deck.gl
 Install svelte-deck.gl
@@ -17,11 +19,9 @@ import SvelteDeckGL from "svelte-deck.gl";
 import { HexagonLayer } from "@deck.gl/aggregation-layers";
 import SvelteDeckGL from "svelte-deck.gl";
 
-const DATA_URL =
-	"https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/sf-bike-parking.json";
+const DATA_URL = "https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/sf-bike-parking.json";
 
-const MAPBOX_TOKEN =
-	"<YOUR_TOKEN>";
+const MAPBOX_TOKEN = "<YOUR_TOKEN>";
 
 // Create you own Tooltip
 function getTooltip({ object }) {
