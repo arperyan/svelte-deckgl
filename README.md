@@ -9,7 +9,9 @@ npm i svelte-deck.gl
 Import the component into your app/components
 
 import SvelteDeckGL from "svelte-deck.gl";
- 
+
+
+### Using Mapbox
 ```<script>
 	import { HexagonLayer } from "@deck.gl/aggregation-layers";
 	import SvelteDeckGL from "svelte-deck.gl";
