@@ -1,6 +1,6 @@
 <script>
 	import { HexagonLayer } from "@deck.gl/aggregation-layers";
-	import SvelteDeckGL from "./Deckgl.svelte";
+	import { SvelteDeckGL } from "./components/components.module.js";
 
 	let data;
 

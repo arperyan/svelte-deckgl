@@ -23,6 +23,8 @@
     /** @type {Function} */
     export let getTooltip = () => {};
 
+    $: console.log(deckMap)
+
     onMount(() => {
         // creating the map
         mapbox.accessToken = TOKEN;
@@ -30,8 +32,8 @@
         link.rel = "stylesheet";
         link.type = "text/css";
         link.href = "https://unpkg.com/mapbox-gl/dist/mapbox-gl.css";
-
-        /** @type {Object.<string, number>}*/
+        console.log(deckMap)
+        
         const optionsWithDefaults = Object.assign(
             {
                 container: deckMap,
