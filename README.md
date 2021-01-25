@@ -63,7 +63,7 @@ const layers = new HexagonLayer({
 </script>
 
 <div class="App">
-	<SvelteDeckGL {layers} {viewState} {getTooltip} TOKEN={MAPBOX_TOKEN} />
+  <SvelteDeckGL {layers} {viewState} {getTooltip} TOKEN={MAPBOX_TOKEN} />
 </div>
 
 <style>
