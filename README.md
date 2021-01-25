@@ -1,13 +1,13 @@
 # Svelte DeckGL
 
-# Deck.gl and Mapbox
+## Deck.gl and Mapbox
 Head over to Deck.gl and Mapbox to see the official documentation to learn more.
 
-# Install svelte-deck.gl
+## Install svelte-deck.gl
 Install svelte-deck.gl
 npm i svelte-deck.gl
 
-# Usage
+## Usage
 Import the component into your app/components
 
 import SvelteDeckGL from "svelte-deck.gl";
