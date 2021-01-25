@@ -17,7 +17,11 @@
 
 		const count = object.points.length;
 
-		return `${count} No. of bikes`;
+		return (
+			object &&
+			`${object.position.join(", ")} 
+			No. of bikes: ${count} `
+		);
 	}
 	let viewState = {
 		longitude: -122.4,
