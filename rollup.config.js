@@ -3,9 +3,11 @@ import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import replace from "rollup-plugin-replace"
+import babel from 'rollup-plugin-babel';
 import pkg from './package.json';
-import peerDepsExternal from 'rollup-plugin-peer-deps-external';
-import {terser} from 'rollup-plugin-terser';
+import {
+	terser
+} from 'rollup-plugin-terser';
 import css from 'rollup-plugin-css-only';
 
 const production = !process.env.ROLLUP_WATCH;
@@ -17,11 +19,11 @@ export default {
 		sourcemap: true,
 		format: 'iife',
 		name: 'app',
-		file: 'public/bundle.js',
+		file: 'public/build/bundle.js',
 		globals: {
-				'@deck.gl/core': 'core',
-				'@deck.gl/layers': 'layers'
-			}
+			'@deck.gl/core': 'core',
+			'@deck.gl/layers': 'layers'
+		}
 	} : [{
 			file: pkg.module,
 			format: 'es',
@@ -40,12 +42,11 @@ export default {
 			globals: {
 				'@deck.gl/core': 'core',
 				'@deck.gl/layers': 'layers'
-		
+
 			}
 		}
-		
+
 	],
-	external: ["@deck.gl/core"],
 	plugins: [
 		svelte({
 			compilerOptions: {
@@ -53,16 +54,22 @@ export default {
 				dev: !production
 			},
 			css: (css) => {
-				css.write('public/bundle.css');
+				css.write('public/build/bundle.css');
 			},
 		}),
 		css({
 			output: 'bundle.css'
 		}),
+		babel({
+			runtimeHelpers: true,
+		}),
+		// css({
+		// 	output: 'bundle.css'
+		// }),
 		replace({
 			'process.env.NODE_ENV': JSON.stringify('production'),
 		}),
-		peerDepsExternal(),
+
 		// we'll extract any component CSS out into
 		// a separate file - better for performance
 
@@ -76,7 +83,9 @@ export default {
 			browser: true,
 			dedupe: ['svelte']
 		}),
-		commonjs(),
+		commonjs({
+			include: ['node_modules/**'],
+		}),
 
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated
@@ -90,7 +99,7 @@ export default {
 		// instead of npm run dev), minify
 		production && terser()
 	],
-	external: ["@deck.gl/core"],
+	// external: ["@deck.gl/core"],
 	watch: {
 		clearScreen: false
 	}

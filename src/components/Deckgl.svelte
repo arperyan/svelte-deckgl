@@ -1,16 +1,17 @@
 <script>
     import { Deck } from "@deck.gl/core";
     import mapbox from "mapbox-gl";
-    import { onMount } from "svelte";
+    import { afterUpdate, onMount, tick } from "svelte";
+    import { HexagonLayer } from "@deck.gl/aggregation-layers";
 
     /** @type {Object.<string, number>}*/
     let map = null;
     /** @type {Object.<string, number>}*/
     let deck = null;
     /** @type {HTMLElement} */
-    let deckMap;
+    let deckMap = null;
     /** @type {HTMLElement} */
-    let deckCanvas;
+    let deckCanvas = null;
     /** @type {Object.<string, number>} - mapbox gl extra view States*/
     let options = {};
 
@@ -23,17 +24,15 @@
     /** @type {Function} */
     export let getTooltip = () => {};
 
-    $: console.log(deckMap)
-
     onMount(() => {
         // creating the map
+
         mapbox.accessToken = TOKEN;
         const link = document.createElement("link");
         link.rel = "stylesheet";
         link.type = "text/css";
         link.href = "https://unpkg.com/mapbox-gl/dist/mapbox-gl.css";
-        console.log(deckMap)
-        
+
         const optionsWithDefaults = Object.assign(
             {
                 container: deckMap,
@@ -51,15 +50,15 @@
 
         link.onload = () => {
             map = new mapbox.Map(optionsWithDefaults);
-
-            render();
         };
+        render();
 
         return () => {
             map.remove();
             link.parentNode.removeChild(link);
         };
     });
+    $: console.log(layers);
 
     // creating the deck.gl instance
     const render = () => {
