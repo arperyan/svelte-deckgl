@@ -33,20 +33,29 @@
 		style: "mapbox://styles/arperyan/cj8n10t397cyn2rkap4ybrjid",
 	};
 
-	const layers = new HexagonLayer({
-		id: "hexagon-layer",
-		data: DATA_URL,
-		pickable: true,
-		extruded: true,
-		radius: 200,
-		autoHighlight: true,
-		elevationScale: 4,
-		getPosition: (d) => d.COORDINATES,
-	});
+	function layers() {
+		return new HexagonLayer({
+			id: "hexagon-layer",
+			data: DATA_URL,
+			pickable: true,
+			extruded: true,
+			radius: 200,
+			autoHighlight: true,
+			elevationScale: 4,
+			getPosition: (d) => d.COORDINATES,
+		});
+	}
+
+	$: layers2 = layers();
 </script>
 
 <div class="App">
-	<SvelteDeckGL {layers} {viewState} {getTooltip} TOKEN={MAPBOX_TOKEN} />
+	<SvelteDeckGL
+		layers={layers2}
+		{viewState}
+		{getTooltip}
+		TOKEN={MAPBOX_TOKEN}
+	/>
 </div>
 
 <style>

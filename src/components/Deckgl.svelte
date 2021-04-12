@@ -1,8 +1,8 @@
 <script>
     import { Deck } from "@deck.gl/core";
     import mapbox from "mapbox-gl";
-    import { afterUpdate, onMount, tick } from "svelte";
-    import { HexagonLayer } from "@deck.gl/aggregation-layers";
+    import { onMount, afterUpdate } from "svelte";
+    import { layerState } from "../../../svelte-deckgl/src/App.svelte";
 
     /** @type {Object.<string, number>}*/
     let map = null;
@@ -50,25 +50,27 @@
 
         link.onload = () => {
             map = new mapbox.Map(optionsWithDefaults);
+            render();
+            deck.setProps({ layers: [layers] });
         };
-        render();
 
         return () => {
             map.remove();
             link.parentNode.removeChild(link);
         };
     });
-    $: console.log(layers);
+
+    $: console.log($layerState);
 
     // creating the deck.gl instance
-    const render = () => {
+    function render() {
         deck = new Deck({
             canvas: deckCanvas,
             width: "100%",
             height: "100%",
             initialViewState: viewState,
             controller: true,
-            layers: [layers],
+            layers: [],
             onViewStateChange: ({ viewState }) => {
                 map.jumpTo({
                     center: [viewState.longitude, viewState.latitude],
@@ -79,8 +81,9 @@
             },
             getTooltip,
         });
-        deck.setProps({ layers: [layers] });
-    };
+
+        //
+    }
 </script>
 
 <div class="deck-container">
