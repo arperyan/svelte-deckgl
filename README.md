@@ -3,26 +3,17 @@
 ## Deck.gl and Mapbox
 Head over to Deck.gl and Mapbox to see the official documentation to learn more.
 
-## Install svelte-deck.gl
-Install svelte-deck.gl
-
-```npm i svelte-deck.gl```
-
-## Usage
-Import the component into your app/components
-
-```import SvelteDeckGL from "svelte-deck.gl";```
-
-
 ### Using Mapbox
 ```
 <script>
 import { HexagonLayer } from "@deck.gl/aggregation-layers";
-import SvelteDeckGL from "svelte-deck.gl";
+import { SvelteDeckGL } from "./components/components.module";
 
 const DATA_URL = "https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/sf-bike-parking.json";
 
 const MAPBOX_TOKEN = "<YOUR_TOKEN>";
+
+let deckInstance;
 
 // Create you own Tooltip
 function getTooltip({ object }) {
@@ -64,7 +55,7 @@ const layers = new HexagonLayer({
 </script>
 
 <div class="App">
-  <SvelteDeckGL {layers} {viewState} {getTooltip} TOKEN={MAPBOX_TOKEN} />
+  <SvelteDeckGL {layers} {viewState} {getTooltip} TOKEN={MAPBOX_TOKEN} bind:deck={deckInstance}/>
 </div>
 
 <style>
